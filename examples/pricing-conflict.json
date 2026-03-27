@@ -1,0 +1,80 @@
+{
+  "scenario": "Pricing Conflict",
+  "description": "Three agents propose conflicting pricing actions. The billing agent holds institutional pricing authority and is selected.",
+  "context": {
+    "domain": "pricing",
+    "system_of_record": "billing-system",
+    "constraints": ["minimum_margin_policy", "approved_discount_bands"]
+  },
+  "principals": [
+    { "id": "org", "type": "organization", "name": "Acme Corp" },
+    { "id": "finance-policy", "type": "policy", "name": "Finance Pricing Policy" },
+    { "id": "sales-role", "type": "role", "name": "Sales Representative" },
+    { "id": "customer-party", "type": "contract_party", "name": "Customer" }
+  ],
+  "agents": [
+    { "id": "billing-agent", "principal_id": "finance-policy", "name": "Billing Agent" },
+    { "id": "sales-agent", "principal_id": "sales-role", "name": "Sales Agent" },
+    { "id": "customer-agent", "principal_id": "customer-party", "name": "Customer Agent" }
+  ],
+  "edges": [
+    {
+      "from": "org",
+      "to": "billing-agent",
+      "layer": "institutional",
+      "domain": "pricing",
+      "relationship": "governs",
+      "weight": 0.9
+    },
+    {
+      "from": "org",
+      "to": "sales-agent",
+      "layer": "institutional",
+      "domain": "pricing",
+      "relationship": "delegates",
+      "weight": 0.6,
+      "scope": {
+        "actions": ["propose_discount"],
+        "constraints": ["approved_discount_bands"]
+      }
+    },
+    {
+      "from": "customer-party",
+      "to": "customer-agent",
+      "layer": "agent",
+      "domain": "pricing",
+      "relationship": "represents",
+      "weight": 0.4
+    }
+  ],
+  "conflict": {
+    "domain": "pricing",
+    "proposals": [
+      { "id": "p1", "agent": "sales-agent", "action": "apply_15_percent_discount" },
+      { "id": "p2", "agent": "billing-agent", "action": "enforce_standard_price" },
+      { "id": "p3", "agent": "customer-agent", "action": "request_20_percent_discount" }
+    ]
+  },
+  "resolution": {
+    "rule": "selected = argmax(authority(agent, context))",
+    "authority_scores": {
+      "billing-agent": 0.9,
+      "sales-agent": 0.6,
+      "customer-agent": 0.4
+    },
+    "selected_agent": "billing-agent",
+    "selected_principal": "finance-policy",
+    "selected_action": "enforce_standard_price",
+    "reason": "Billing Agent holds institutional pricing authority. Both proposed discounts fall outside approved bands and are rejected.",
+    "rejected": [
+      {
+        "proposal_id": "p1",
+        "reason": "outside approved discount bands"
+      },
+      {
+        "proposal_id": "p3",
+        "reason": "outside approved discount bands"
+      }
+    ]
+  }
+}

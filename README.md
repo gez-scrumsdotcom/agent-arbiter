@@ -160,7 +160,7 @@ A customer requests a change to payment terms mid-deal. Three agents have compet
 
 | Layer | Authority |
 |---|---|
-| Regulatory | Minimum compliance clauses |
+| Constitutional | Minimum compliance clauses |
 | Institutional | Finance payment policy |
 | Agent | Sales discretion |
 
@@ -207,6 +207,7 @@ A(agent, context) =
   hierarchy +
   contract +
   system_of_record +
+  regulatory +
   learned_signals
 ```
 

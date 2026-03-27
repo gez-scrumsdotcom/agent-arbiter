@@ -1,36 +1,173 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AuthorityGraph",
-  "description": "Stub schema for the Authority Arbiter authority graph.",
+  "title": "Authority Graph",
+  "description": "Schema for representing agents, principals, authority relationships, and resolution context in Authority Arbiter.",
   "type": "object",
+  "required": ["principals", "agents", "edges"],
   "properties": {
-    "nodes": {
+    "principals": {
       "type": "array",
-      "description": "Agents and principals in the system.",
+      "description": "Real-world identities such as organizations, roles, systems, or contract parties.",
       "items": {
         "type": "object",
+        "required": ["id", "type", "name"],
         "properties": {
-          "id": { "type": "string" },
-          "type": { "type": "string", "enum": ["agent", "principal"] },
-          "label": { "type": "string" }
+          "id": {
+            "type": "string",
+            "description": "Unique principal identifier."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["organization", "role", "system", "contract_party", "policy", "regulator", "user"]
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable principal name."
+          },
+          "domain": {
+            "type": "array",
+            "description": "Optional list of domains where this principal is active.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional extension data.",
+            "additionalProperties": true
+          }
         },
-        "required": ["id", "type", "label"]
+        "additionalProperties": false
+      }
+    },
+    "agents": {
+      "type": "array",
+      "description": "Computational actors that represent principals and propose actions.",
+      "items": {
+        "type": "object",
+        "required": ["id", "principal_id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique agent identifier."
+          },
+          "principal_id": {
+            "type": "string",
+            "description": "Identifier of the principal represented by this agent."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable agent name."
+          },
+          "domain": {
+            "type": "array",
+            "description": "Optional list of domains where this agent is active.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional extension data.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "edges": {
       "type": "array",
-      "description": "Authority relationships between nodes.",
+      "description": "Directed authority relationships between principals or agents.",
       "items": {
         "type": "object",
+        "required": ["from", "to", "layer", "domain", "relationship"],
         "properties": {
-          "from": { "type": "string" },
-          "to": { "type": "string" },
-          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
-          "context": { "type": "string" }
+          "from": {
+            "type": "string",
+            "description": "Source principal or agent identifier."
+          },
+          "to": {
+            "type": "string",
+            "description": "Target principal or agent identifier."
+          },
+          "layer": {
+            "type": "string",
+            "enum": ["constitutional", "institutional", "system", "agent"],
+            "description": "Authority layer for this relationship."
+          },
+          "domain": {
+            "type": "string",
+            "description": "Domain in which this authority relationship applies."
+          },
+          "relationship": {
+            "type": "string",
+            "enum": ["governs", "delegates", "owns_truth", "constrains", "represents"],
+            "description": "Type of authority relationship."
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Optional bounded weight for precedence within a layer."
+          },
+          "scope": {
+            "type": "object",
+            "description": "Optional delegation or authority limits.",
+            "properties": {
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "time_window": {
+                "type": "string"
+              },
+              "constraints": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional extension data.",
+            "additionalProperties": true
+          }
         },
-        "required": ["from", "to", "weight"]
+        "additionalProperties": false
       }
+    },
+    "context": {
+      "type": "object",
+      "description": "Optional runtime context for evaluating authority.",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Active decision domain."
+        },
+        "system_of_record": {
+          "type": "string",
+          "description": "Identifier of the principal or agent that owns factual truth in this domain."
+        },
+        "constraints": {
+          "type": "array",
+          "description": "Active constraints in the current context.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Optional extension data.",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
     }
   },
-  "required": ["nodes", "edges"]
+  "additionalProperties": false
 }

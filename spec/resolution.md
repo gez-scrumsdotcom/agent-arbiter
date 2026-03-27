@@ -1,25 +1,83 @@
 # Resolution Specification
 
-> Stub — to be completed.
+## Purpose
 
-Defines the algorithm for selecting a winning action from a set of conflicting proposals.
+Authority Arbiter resolves conflicts by selecting a single action from a set of competing agent proposals.
 
-## Algorithm
+It does not negotiate, iterate, or converge.
+
+It selects.
+
+---
+
+## Input
+
+A conflict set:
 
 ```
-selected_action = argmax(authority(agent, context))
+C = { a₁, a₂, ..., aₙ }
 ```
 
-## Steps
+Where:
 
-1. Collect all proposed actions from competing agents
-2. Detect conflicts between proposals
-3. Compute authority score for each agent in context
-4. Select the action from the agent with the highest authority
-5. Log the resolution with full traceability
+- each `aᵢ` is an agent proposing an action
+- all agents in `C` are in conflict within the same context
 
-## Tie-breaking
+Context `x` includes:
 
-- If two agents have equal authority, the higher layer takes precedence
-- If still equal, the most recently granted authority wins
-- Ties must never produce non-deterministic output
+- domain
+- constraints
+- active authority relationships
+- system-of-record
+
+---
+
+## Output
+
+A single selected action:
+
+```
+a*
+```
+
+Where:
+
+- `a*` is a member of `C`
+- `a*` is the action proposed by the highest-authority agent in the given context
+
+---
+
+## Resolution Rule
+
+```
+selected = argmax(authority(agent, context))
+```
+
+---
+
+## Resolution Steps
+
+1. Identify the conflict set `C`
+2. Evaluate authority for each agent in context `x`
+3. Apply layer precedence: constitutional → institutional → system → agent
+4. Apply delegation rules and bounds
+5. Select the highest-authority agent
+
+---
+
+## Constraints
+
+Resolution must be:
+
+- **Deterministic** — the same inputs must produce the same output
+- **Domain-scoped** — authority is evaluated within the active domain only
+- **Bounded** — resolution must terminate
+- **Explainable** — the selected agent and reason must be attributable
+
+If multiple agents have equal authority, a deterministic tie-break must be applied.
+
+---
+
+## Summary
+
+Authority Arbiter resolves conflict by selecting the single highest-authority action within a defined context.
