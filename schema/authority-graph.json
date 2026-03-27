@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuthorityGraph",
+  "description": "Stub schema for the Authority Arbiter authority graph.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "description": "Agents and principals in the system.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["agent", "principal"] },
+          "label": { "type": "string" }
+        },
+        "required": ["id", "type", "label"]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Authority relationships between nodes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "context": { "type": "string" }
+        },
+        "required": ["from", "to", "weight"]
+      }
+    }
+  },
+  "required": ["nodes", "edges"]
+}

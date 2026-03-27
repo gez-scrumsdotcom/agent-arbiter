@@ -1,0 +1,20 @@
+{
+  "scenario": "HVAC System Control",
+  "description": "Stub — resolving conflict between user preference and system constraints.",
+  "agents": [
+    { "id": "user", "label": "User Agent", "authority": 0.4 },
+    { "id": "energy", "label": "Energy Optimisation Agent", "authority": 0.65 },
+    { "id": "system", "label": "System Constraint Agent", "authority": 0.9 }
+  ],
+  "conflict": {
+    "proposals": [
+      { "agent": "user", "action": "set_temperature_16c" },
+      { "agent": "energy", "action": "set_temperature_19c" },
+      { "agent": "system", "action": "enforce_minimum_21c" }
+    ]
+  },
+  "resolution": {
+    "selected_agent": "system",
+    "selected_action": "enforce_minimum_21c"
+  }
+}

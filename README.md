@@ -232,13 +232,15 @@ With constraints:
 
 ```
 authority-arbiter/
-├── spec/
-├── schema/
-├── reference/
-├── examples/
-├── docs/
+├── spec/        # formal definitions of authority and resolution
+├── schema/      # authority graph schema
+├── reference/   # minimal reference implementation
+├── examples/    # real-world scenarios
+├── docs/        # paper and supporting material
 └── README.md
 ```
+
+The repository is organized to separate specification, schema, implementation, and real-world examples.
 
 ---
 
@@ -250,7 +252,7 @@ authority-arbiter/
 
 ## Author
 
-Created by **Gerald Neves** at [Scrums.com](https://scrums.com), Software Engineering Orchestration Platform (SEOP), orchestrating tools, teams and AI agents.
+Created by **Gerald Neves** at [Scrums.com](https://www.scrums.com), Software Engineering Orchestration Platform (SEOP), orchestrating tools, teams and AI agents.
 
 ---
 
