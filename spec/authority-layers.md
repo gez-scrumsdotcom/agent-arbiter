@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Authority Arbiter resolves conflicts through layered precedence.
+Agent Arbiter resolves conflicts through layered precedence.
 
 These layers define the order in which authority applies and prevent ambiguous or recursive resolution across agents, systems, and institutions.
 
@@ -99,7 +99,7 @@ Agent authority may operate only within the bounds imposed by higher layers.
 
 ## Resolution Order
 
-Authority Arbiter resolves conflicts in this order:
+Agent Arbiter resolves conflicts in this order:
 
 1. Check constitutional constraints
 2. Apply institutional authority

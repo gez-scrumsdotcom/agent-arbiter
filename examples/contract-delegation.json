@@ -1,20 +1,48 @@
 {
   "scenario": "Contract Delegation",
-  "description": "Stub — resolving conflict where authority is derived from contractual relationships.",
-  "agents": [
-    { "id": "sales", "label": "Sales Agent", "authority": 0.5 },
-    { "id": "legal", "label": "Legal Agent", "authority": 0.85 },
-    { "id": "finance", "label": "Finance Agent", "authority": 0.75 }
-  ],
-  "conflict": {
-    "proposals": [
-      { "agent": "sales", "action": "accept_net90_terms" },
-      { "agent": "legal", "action": "enforce_net30_terms" },
-      { "agent": "finance", "action": "flag_payment_risk" }
-    ]
+  "description": "Legal authority is delegated for contract amendments within defined bounds.",
+
+  "context": {
+    "domain": "contract",
+    "constraints": ["legal_compliance", "approved_terms_only"]
   },
+
+  "principals": [
+    { "id": "org", "type": "organization", "name": "Acme Corp" },
+    { "id": "legal-policy", "type": "policy", "name": "Legal Policy" },
+    { "id": "sales-role", "type": "role", "name": "Sales Representative" }
+  ],
+
+  "agents": [
+    { "id": "legal-agent", "principal_id": "legal-policy", "name": "Legal Agent" },
+    { "id": "sales-agent", "principal_id": "sales-role", "name": "Sales Agent" }
+  ],
+
   "resolution": {
-    "selected_agent": "legal",
-    "selected_action": "enforce_net30_terms"
-  }
+    "selected_agent": "legal-agent",
+    "reason": "legal-agent holds institutional authority over contract amendments; sales-agent may only propose within delegated scope"
+  },
+
+  "edges": [
+    {
+      "from": "org",
+      "to": "legal-agent",
+      "layer": "institutional",
+      "domain": "contract",
+      "relationship": "governs",
+      "weight": 0.9
+    },
+    {
+      "from": "legal-agent",
+      "to": "sales-agent",
+      "layer": "institutional",
+      "domain": "contract",
+      "relationship": "delegates",
+      "weight": 0.6,
+      "scope": {
+        "actions": ["propose_terms"],
+        "constraints": ["approved_terms_only"]
+      }
+    }
+  ]
 }

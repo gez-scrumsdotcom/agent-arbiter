@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Authority Arbiter supports delegated authority, but only within explicit bounds.
+Agent Arbiter supports delegated authority, but only within explicit bounds.
 
 Delegation allows an agent or principal to pass limited authority to another agent within a defined domain and context. These rules ensure that delegation remains computable, explainable, and bounded.
 
@@ -62,7 +62,7 @@ Examples of bounds:
 
 Delegation chains must be finite.
 
-Authority Arbiter must reject or truncate delegation graphs that recurse indefinitely or exceed system limits.
+Agent Arbiter must reject or truncate delegation graphs that recurse indefinitely or exceed system limits.
 
 ### 5. Delegation Cannot Exceed Source Authority
 
@@ -94,7 +94,7 @@ Inherited authority must remain:
 
 ## Delegation Constraints
 
-Authority Arbiter enforces the following constraints:
+Agent Arbiter enforces the following constraints:
 
 - delegation must be explicit
 - delegation must be finite
@@ -121,7 +121,7 @@ Delegation may not elevate lower-layer authority above higher-layer constraints.
 
 ## Resolution Behavior
 
-When delegated authority is present, Authority Arbiter must:
+When delegated authority is present, Agent Arbiter must:
 
 1. Identify the source authority
 2. Verify the delegation is valid in the current domain
@@ -220,7 +220,7 @@ This ensures delegated authority remains explainable and reviewable.
 
 ## Summary
 
-Delegation in Authority Arbiter is:
+Delegation in Agent Arbiter is:
 
 - **explicit** — always declared, never inferred
 - **domain-scoped** — bounded to the active context

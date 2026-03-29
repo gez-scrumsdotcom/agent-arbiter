@@ -1,20 +1,53 @@
 {
-  "scenario": "HVAC System Control",
-  "description": "Stub — resolving conflict between user preference and system constraints.",
-  "agents": [
-    { "id": "user", "label": "User Agent", "authority": 0.4 },
-    { "id": "energy", "label": "Energy Optimisation Agent", "authority": 0.65 },
-    { "id": "system", "label": "System Constraint Agent", "authority": 0.9 }
-  ],
-  "conflict": {
-    "proposals": [
-      { "agent": "user", "action": "set_temperature_16c" },
-      { "agent": "energy", "action": "set_temperature_19c" },
-      { "agent": "system", "action": "enforce_minimum_21c" }
-    ]
+  "scenario": "HVAC Control",
+  "description": "System constraints override user preference in environmental control.",
+
+  "context": {
+    "domain": "environment",
+    "system_of_record": "hvac-system",
+    "constraints": ["min_temperature_21"]
   },
+
+  "principals": [
+    { "id": "building-policy", "type": "policy", "name": "Building Policy" },
+    { "id": "hvac-system", "type": "system", "name": "HVAC System" },
+    { "id": "user", "type": "user", "name": "Occupant" }
+  ],
+
+  "agents": [
+    { "id": "hvac-agent", "principal_id": "hvac-system", "name": "HVAC Controller" },
+    { "id": "user-agent", "principal_id": "user", "name": "User Agent" }
+  ],
+
   "resolution": {
-    "selected_agent": "system",
-    "selected_action": "enforce_minimum_21c"
-  }
+    "selected_agent": "hvac-agent",
+    "reason": "building-policy enforces a constitutional constraint of min 21°C; user preference is overridden by system authority"
+  },
+
+  "edges": [
+    {
+      "from": "building-policy",
+      "to": "hvac-agent",
+      "layer": "constitutional",
+      "domain": "environment",
+      "relationship": "constrains",
+      "weight": 1.0
+    },
+    {
+      "from": "hvac-system",
+      "to": "hvac-agent",
+      "layer": "system",
+      "domain": "environment",
+      "relationship": "owns_truth",
+      "weight": 0.9
+    },
+    {
+      "from": "user",
+      "to": "user-agent",
+      "layer": "agent",
+      "domain": "environment",
+      "relationship": "represents",
+      "weight": 0.4
+    }
+  ]
 }

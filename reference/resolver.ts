@@ -1,4 +1,4 @@
-// Authority Arbiter — Reference Resolver
+// Agent Arbiter — Reference Resolver
 // Stub implementation. See spec/resolution.md for full specification.
 
 type Agent = string
@@ -17,11 +17,21 @@ function resolve(
 
 /**
  * Computes an authority score for an agent within a given context.
- * Weights are illustrative — replace with real authority model.
+ *
+ * This is a stub implementation.
+ * Implementers should replace this with a domain-specific authority model
+ * as defined in spec/authority-model.md.
+ *
+ * The example below illustrates a simple fixed-weight lookup.
  */
-function computeAuthority(agent: Agent, context: string): number {
-  // TODO: implement full authority model per spec/authority-model.md
-  const weights: Record<string, number> = {}
+function computeAuthority(agent: Agent, _context: any): number {
+  // Example only — replace with real authority computation
+  const weights: Record<string, number> = {
+    "billing-agent": 0.9,
+    "sales-agent": 0.6,
+    "customer-agent": 0.4
+  }
+
   return weights[agent] ?? 0
 }
 

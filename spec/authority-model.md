@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Authority Arbiter resolves conflicts in multi-agent systems by selecting the highest-authority action within a given context.
+Agent Arbiter resolves conflicts in multi-agent systems by selecting the highest-authority action within a given context.
 
 It replaces negotiation, convergence, and optimization with deterministic precedence-based selection grounded in real-world structures.
 
@@ -95,7 +95,7 @@ Authority is resolved through layered precedence. Higher layers always override 
 
 ## Principals and Agents
 
-Authority Arbiter distinguishes between:
+Agent Arbiter distinguishes between:
 
 - **Principal** — a real-world identity (organization, role, or contract party)
 - **Agent** — a computational actor representing a principal
@@ -126,7 +126,7 @@ Examples of domains:
 
 ## Resolution Constraints
 
-Authority Arbiter enforces the following invariants:
+Agent Arbiter enforces the following invariants:
 
 - higher layers override lower layers
 - authority must be domain-scoped
@@ -138,7 +138,7 @@ Authority Arbiter enforces the following invariants:
 
 ## Non-Goals
 
-Authority Arbiter does not:
+Agent Arbiter does not:
 
 - model all influence relationships
 - replace decentralized consensus systems
@@ -149,7 +149,7 @@ Authority Arbiter does not:
 
 ## Summary
 
-Authority Arbiter defines authority as a deterministic, context-aware precedence relation over agents.
+Agent Arbiter defines authority as a deterministic, context-aware precedence relation over agents.
 
 This transforms multi-agent conflict resolution from:
 

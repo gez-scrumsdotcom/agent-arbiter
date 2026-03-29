@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Authority Arbiter resolves conflicts by selecting a single action from a set of competing agent proposals.
+Agent Arbiter resolves conflicts by selecting a single action from a set of competing agent proposals.
 
 It does not negotiate, iterate, or converge.
 
@@ -80,4 +80,4 @@ If multiple agents have equal authority, a deterministic tie-break must be appli
 
 ## Summary
 
-Authority Arbiter resolves conflict by selecting the single highest-authority action within a defined context.
+Agent Arbiter resolves conflict by selecting the single highest-authority action within a defined context.

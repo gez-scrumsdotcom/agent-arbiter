@@ -1,19 +1,44 @@
 {
-  "scenario": "Organisational Hierarchy",
-  "description": "Stub — resolving conflict across agents mapped to an organisational structure.",
-  "agents": [
-    { "id": "ceo", "label": "CEO Agent", "authority": 1.0 },
-    { "id": "cfo", "label": "CFO Agent", "authority": 0.85 },
-    { "id": "manager", "label": "Manager Agent", "authority": 0.6 }
-  ],
-  "conflict": {
-    "proposals": [
-      { "agent": "manager", "action": "approve_budget_increase" },
-      { "agent": "cfo", "action": "reject_budget_increase" }
-    ]
+  "scenario": "Organizational Hierarchy",
+  "description": "Authority flows through organizational structure.",
+
+  "context": {
+    "domain": "decision"
   },
+
+  "principals": [
+    { "id": "ceo", "type": "role", "name": "CEO" },
+    { "id": "finance-head", "type": "role", "name": "Head of Finance" },
+    { "id": "sales-head", "type": "role", "name": "Head of Sales" }
+  ],
+
+  "agents": [
+    { "id": "ceo-agent", "principal_id": "ceo", "name": "CEO Agent" },
+    { "id": "finance-agent", "principal_id": "finance-head", "name": "Finance Agent" },
+    { "id": "sales-agent", "principal_id": "sales-head", "name": "Sales Agent" }
+  ],
+
   "resolution": {
-    "selected_agent": "cfo",
-    "selected_action": "reject_budget_increase"
-  }
+    "selected_agent": "ceo-agent",
+    "reason": "ceo-agent holds the highest institutional authority; finance-agent and sales-agent operate under CEO governance"
+  },
+
+  "edges": [
+    {
+      "from": "ceo",
+      "to": "finance-agent",
+      "layer": "institutional",
+      "domain": "decision",
+      "relationship": "governs",
+      "weight": 0.9
+    },
+    {
+      "from": "ceo",
+      "to": "sales-agent",
+      "layer": "institutional",
+      "domain": "decision",
+      "relationship": "governs",
+      "weight": 0.9
+    }
+  ]
 }

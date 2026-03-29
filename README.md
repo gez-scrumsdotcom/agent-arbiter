@@ -1,6 +1,6 @@
-# Authority Arbiter
+# Agent Arbiter
 
-**Authority Arbiter** is a deterministic primitive that resolves conflicts in multi-agent systems using explicit authority, with consistent entity graph binding across agents, principals, and decisions.
+**Agent Arbiter** is a deterministic primitive that resolves conflicts in multi-agent systems using explicit authority, with consistent entity graph binding across agents, principals, and decisions.
 
 It replaces negotiation, convergence, and optimization with precedence-based selection grounded in real-world structures.
 
@@ -16,7 +16,7 @@ Multi-agent systems typically resolve conflicts through:
 - iterative convergence
 - optimization
 
-Authority Arbiter takes a different approach:
+Agent Arbiter takes a different approach:
 
 > **Conflict is not solved through interaction. It is resolved through precedence.**
 
@@ -41,7 +41,7 @@ Authority is derived from:
 
 ### Entity Consistency
 
-Authority Arbiter ensures that agents, principals, and decisions are consistently represented across systems.
+Agent Arbiter ensures that agents, principals, and decisions are consistently represented across systems.
 
 - Each agent maps to a real-world principal (organization, role, or contract party)
 - Authority relationships are stable and context-aware
@@ -55,9 +55,9 @@ This makes every resolution:
 
 ---
 
-## Why Authority Arbiter
+## Why Agent Arbiter
 
-| Problem | Traditional Systems | Authority Arbiter |
+| Problem | Traditional Systems | Agent Arbiter |
 |---|---|---|
 | Conflict resolution | Iterative | Deterministic |
 | Latency | High | Low |
@@ -66,9 +66,9 @@ This makes every resolution:
 
 ---
 
-## When to Use Authority Arbiter
+## When to Use Agent Arbiter
 
-Use Authority Arbiter when:
+Use Agent Arbiter when:
 
 - multiple agents can propose conflicting actions
 - authority can be defined from real-world structures
@@ -102,7 +102,7 @@ flowchart LR
     A3[Agent N] --> P
 
     P --> C[Conflict Detection]
-    C --> AA[Authority Arbiter]
+    C --> AA[Agent Arbiter]
     AA --> E[Execution]
 ```
 
@@ -243,11 +243,16 @@ authority-arbiter/
 
 The repository is organized to separate specification, schema, implementation, and real-world examples.
 
+> **Note:** No `package.json` or `tsconfig.json` is included. The `reference/` files are illustrative TypeScript, not a published package.
+
 ---
 
-## Reference Paper
+## Paper
 
 *Authority is All You Need: Multi-Agent Conflict Resolution from Real-World Structures*
+
+- Read in repo: [docs/paper.md](docs/paper.md)
+- Download PDF: [paper.pdf](docs/authority-is-all-you-need-multi-agent-conflict-resolution.pdf)
 
 ---
 
