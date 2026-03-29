@@ -1,6 +1,6 @@
 # Agent Arbiter
 
-**Agent Arbiter** is a deterministic primitive that resolves conflicts in multi-agent systems using explicit authority, with consistent entity graph binding across agents, principals, and decisions.
+**Agent Arbiter** resolves conflicts in multi-agent systems by deterministically selecting the agent with explicit authority, grounded in real-world structures such as roles, contracts, and system ownership.
 
 It replaces negotiation, convergence, and optimization with precedence-based selection grounded in real-world structures.
 
