@@ -1,0 +1,64 @@
+{
+  "scenario": "Tie-Break",
+  "description": "Two agents hold identical authority (same layer, same weight). The deterministic tie-break in spec/resolution.md selects the lexicographically smaller agent id.",
+
+  "context": {
+    "domain": "scheduling"
+  },
+
+  "principals": [
+    { "id": "org", "type": "organization", "name": "Acme Corp" },
+    { "id": "role-alpha", "type": "role", "name": "Coordinator Alpha" },
+    { "id": "role-beta", "type": "role", "name": "Coordinator Beta" }
+  ],
+
+  "agents": [
+    { "id": "alpha-agent", "principal_id": "role-alpha", "name": "Alpha Agent" },
+    { "id": "beta-agent", "principal_id": "role-beta", "name": "Beta Agent" }
+  ],
+
+  "edges": [
+    {
+      "from": "org",
+      "to": "alpha-agent",
+      "layer": "institutional",
+      "domain": "scheduling",
+      "relationship": "governs",
+      "weight": 0.7
+    },
+    {
+      "from": "org",
+      "to": "beta-agent",
+      "layer": "institutional",
+      "domain": "scheduling",
+      "relationship": "governs",
+      "weight": 0.7
+    }
+  ],
+
+  "conflict": {
+    "domain": "scheduling",
+    "proposals": [
+      { "id": "p1", "agent": "beta-agent", "action": "schedule_friday" },
+      { "id": "p2", "agent": "alpha-agent", "action": "schedule_monday" }
+    ]
+  },
+
+  "resolution": {
+    "rule": "selected = argmax(authority(agent, context))",
+    "authority_scores": {
+      "alpha-agent": 0.7,
+      "beta-agent": 0.7
+    },
+    "selected_agent": "alpha-agent",
+    "selected_principal": "role-alpha",
+    "selected_action": "schedule_monday",
+    "reason": "Both agents hold institutional authority at weight 0.7. Layer and weight tie, so the tie-break selects the lexicographically smaller agent id: alpha-agent < beta-agent.",
+    "rejected": [
+      {
+        "proposal_id": "p1",
+        "reason": "lost the deterministic tie-break on agent id"
+      }
+    ]
+  }
+}

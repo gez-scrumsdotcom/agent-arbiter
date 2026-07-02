@@ -1,0 +1,60 @@
+{
+  "scenario": "Delegation Cycle",
+  "description": "Three agents delegate to each other in a cycle (A → B → C → A). Delegation must terminate, so a conforming resolver rejects the graph instead of resolving.",
+
+  "context": {
+    "domain": "operations"
+  },
+
+  "principals": [
+    { "id": "role-a", "type": "role", "name": "Operator A" },
+    { "id": "role-b", "type": "role", "name": "Operator B" },
+    { "id": "role-c", "type": "role", "name": "Operator C" }
+  ],
+
+  "agents": [
+    { "id": "agent-a", "principal_id": "role-a", "name": "Agent A" },
+    { "id": "agent-b", "principal_id": "role-b", "name": "Agent B" },
+    { "id": "agent-c", "principal_id": "role-c", "name": "Agent C" }
+  ],
+
+  "edges": [
+    {
+      "from": "agent-a",
+      "to": "agent-b",
+      "layer": "institutional",
+      "domain": "operations",
+      "relationship": "delegates",
+      "weight": 0.5
+    },
+    {
+      "from": "agent-b",
+      "to": "agent-c",
+      "layer": "institutional",
+      "domain": "operations",
+      "relationship": "delegates",
+      "weight": 0.5
+    },
+    {
+      "from": "agent-c",
+      "to": "agent-a",
+      "layer": "institutional",
+      "domain": "operations",
+      "relationship": "delegates",
+      "weight": 0.5
+    }
+  ],
+
+  "conflict": {
+    "domain": "operations",
+    "proposals": [
+      { "id": "p1", "agent": "agent-a", "action": "restart_service" },
+      { "id": "p2", "agent": "agent-b", "action": "scale_service" }
+    ]
+  },
+
+  "resolution": {
+    "expected_error": "delegation_cycle",
+    "reason": "agent-a → agent-b → agent-c → agent-a forms a circular delegation chain; delegation does not terminate (see delegation-rules: infinite chain), so the graph is rejected."
+  }
+}

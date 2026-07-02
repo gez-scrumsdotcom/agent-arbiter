@@ -72,6 +72,8 @@ export interface Conflict {
   proposals: Proposal[]
 }
 
+export type ExpectedError = 'empty_conflict_set' | 'delegation_cycle'
+
 export interface DeclaredResolution {
   rule?: string
   authority_scores?: Record<string, number>
@@ -80,6 +82,8 @@ export interface DeclaredResolution {
   selected_action?: string
   reason?: string
   rejected?: { proposal_id: string; reason: string }[]
+  /** For negative-path scenarios: the error the resolver must raise. */
+  expected_error?: ExpectedError
 }
 
 export interface AuthorityGraph {
@@ -105,9 +109,11 @@ export const LAYER_RANK: Record<Layer, number> = {
 export const MAX_DELEGATION_DEPTH = 3
 
 /**
- * Effective authority of a node: the highest applicable layer and the
- * within-layer weight, plus the granting path for auditability.
- * `layer: null` means the node holds no authority in the active domain.
+ * Effective authority of a node: the lexicographic tuple
+ * `A(agent, context) = (L, s)` from spec/authority-model.md — the highest
+ * applicable layer and the within-layer weight — plus the granting path
+ * for auditability. `layer: null` means the node holds no authority in
+ * the active domain.
  */
 export interface AuthorityScore {
   layer: Layer | null
@@ -154,9 +160,11 @@ export class DelegationCycleError extends Error {
 }
 
 /**
- * Compares two authority scores lexicographically by (layer, weight).
- * Positive when `a` outranks `b`. Authority is override-based, not
- * additive: no sum of lower grants can outrank a single higher one.
+ * Compares two authority tuples `(L, s)` lexicographically. Positive when
+ * `a` outranks `b`. Any authority at a higher layer outranks all authority
+ * at lower layers regardless of weight, so strict layer override holds by
+ * construction. Authority is override-based, not additive: no sum of lower
+ * grants can outrank a single higher one.
  */
 export function compareScores(a: AuthorityScore, b: AuthorityScore): number {
   const rank = (s: AuthorityScore): number => (s.layer ? LAYER_RANK[s.layer] : 0)

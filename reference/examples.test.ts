@@ -5,7 +5,18 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { resolve, EmptyConflictSetError, type AuthorityGraph } from './resolver.js'
+import {
+  resolve,
+  DelegationCycleError,
+  EmptyConflictSetError,
+  type AuthorityGraph,
+  type ExpectedError,
+} from './resolver.js'
+
+const ERROR_TYPES: Record<ExpectedError, new (...args: never[]) => Error> = {
+  empty_conflict_set: EmptyConflictSetError,
+  delegation_cycle: DelegationCycleError,
+}
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 const examplesDir = join(repoRoot, 'examples')
@@ -31,6 +42,11 @@ const exampleFiles = readdirSync(examplesDir)
 describe('example scenarios', () => {
   it.each(exampleFiles)('%s resolves to its declared winner', (file) => {
     const graph = loadExample(file)
+    const expectedError = graph.resolution?.expected_error
+    if (expectedError) {
+      expect(() => resolve(graph)).toThrow(ERROR_TYPES[expectedError])
+      return
+    }
     const result = resolve(graph)
     expect(result.selected_agent).toBe(graph.resolution?.selected_agent)
     if (graph.resolution?.selected_action) {
@@ -43,6 +59,11 @@ describe('example scenarios', () => {
 
   it.each(exampleFiles)('%s resolves identically under input permutation', (file) => {
     const graph = loadExample(file)
+    const expectedError = graph.resolution?.expected_error
+    if (expectedError) {
+      expect(() => resolve(permuted(graph))).toThrow(ERROR_TYPES[expectedError])
+      return
+    }
     const original = resolve(graph)
     const reversed = resolve(permuted(graph))
     expect(reversed.selected_agent).toBe(original.selected_agent)
@@ -79,5 +100,27 @@ describe('resolver behavior', () => {
     const result = resolve(loadExample('pricing-conflict.json'))
     expect(result.scores['billing-agent']?.path).toEqual(['org', 'billing-agent'])
     expect(result.scores['sales-agent']?.path).toEqual(['org', 'sales-agent'])
+  })
+
+  it('breaks a full tie on lexicographic agent id', () => {
+    const result = resolve(loadExample('tie-break.json'))
+    expect(result.selected_agent).toBe('alpha-agent')
+    expect(result.decided_by).toBe('agent_id')
+  })
+
+  it('lets a constitutional 0.5 beat an institutional 0.95', () => {
+    const result = resolve(loadExample('constitutional-override.json'))
+    expect(result.selected_agent).toBe('compliance-agent')
+    expect(result.decided_by).toBe('layer')
+    expect(result.scores['compliance-agent']).toMatchObject({ layer: 'constitutional', weight: 0.5 })
+    expect(result.scores['ops-agent']).toMatchObject({ layer: 'institutional', weight: 0.95 })
+  })
+
+  it('does not apply delegation outside its domain', () => {
+    const result = resolve(loadExample('rejected-cross-domain-delegation.json'))
+    expect(result.selected_agent).toBe('billing-agent')
+    expect(result.scores['sales-agent']).toMatchObject({ layer: null, weight: 0 })
+    const salesTrace = result.trace.find((t) => t.agent === 'sales-agent')
+    expect(salesTrace?.notes.join(' ')).toContain('no applicable authority')
   })
 })

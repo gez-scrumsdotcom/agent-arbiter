@@ -10,6 +10,12 @@ It selects.
 
 ---
 
+## Scope
+
+**Conflict detection is out of scope.** The Arbiter receives an already-identified conflict set; gathering proposals and determining that they conflict is the responsibility of the surrounding system.
+
+---
+
 ## Input
 
 A conflict set:
