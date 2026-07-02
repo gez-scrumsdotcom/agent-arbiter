@@ -11,7 +11,10 @@ const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 const examplesDir = join(repoRoot, 'examples')
 
 const schema = JSON.parse(readFileSync(join(repoRoot, 'schema', 'authority-graph.json'), 'utf8'))
-const ajv = new Ajv({ allErrors: true, strict: true })
+// strictRequired stays off: resolution uses `required` inside oneOf branches
+// (selected agent vs expected error), a standard draft-07 pattern that ajv's
+// strictRequired flags even though the properties are declared on the parent.
+const ajv = new Ajv({ allErrors: true, strict: true, strictRequired: false })
 const validate = ajv.compile(schema)
 
 const exampleFiles = readdirSync(examplesDir)

@@ -32,6 +32,8 @@ Given a set of conflicting actions:
 selected_action = argmax(authority(agent, context))
 ```
 
+Authority is a lexicographic tuple `(layer, within-layer score)` — higher layers override lower layers by construction. See [spec/authority-model.md](spec/authority-model.md).
+
 Authority is derived from:
 
 - organizational hierarchy
