@@ -229,3 +229,11 @@ Delegation in Agent Arbiter is:
 - **non-escalatory** — cannot exceed the source authority
 
 These rules ensure that delegated authority remains practical, safe, and computable in real systems.
+
+---
+
+## Related Specifications
+
+- [Authority Model](authority-model.md) — how authority is defined and computed
+- [Authority Layers](authority-layers.md) — layered precedence order
+- [Resolution](resolution.md) — resolution steps and tie-break

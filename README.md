@@ -200,22 +200,12 @@ function resolve(
 
 ## Authority Model
 
-Authority is computed as:
+The formal definitions live in the specs — they are the single source of truth:
 
-```
-A(agent, context) =
-  hierarchy +
-  contract +
-  system_of_record +
-  regulatory +
-  learned_signals
-```
-
-With constraints:
-
-- higher layers override lower layers
-- delegation must terminate
-- domain scope must match
+- [Authority Model](spec/authority-model.md) — components (`hierarchy`, `contract`, `system_of_record`, `regulatory`, `learned_signals`) and core properties
+- [Authority Layers](spec/authority-layers.md) — constitutional → institutional → system → agent precedence
+- [Delegation Rules](spec/delegation-rules.md) — bounded, domain-scoped, terminating delegation
+- [Resolution](spec/resolution.md) — resolution steps and the deterministic tie-break
 
 ---
 
@@ -232,7 +222,7 @@ With constraints:
 ## Repository Structure
 
 ```
-authority-arbiter/
+agent-arbiter/
 ├── spec/        # formal definitions of authority and resolution
 ├── schema/      # authority graph schema
 ├── reference/   # minimal reference implementation

@@ -5,6 +5,14 @@
   "type": "object",
   "required": ["principals", "agents", "edges"],
   "properties": {
+    "scenario": {
+      "type": "string",
+      "description": "Optional short title for the scenario this graph describes."
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional human-readable summary of the scenario and its expected outcome."
+    },
     "principals": {
       "type": "array",
       "description": "Real-world identities such as organizations, roles, systems, or contract parties.",
@@ -26,7 +34,7 @@
           },
           "domain": {
             "type": "array",
-            "description": "Optional list of domains where this principal is active.",
+            "description": "Optional list of domains in which this principal is eligible to hold or receive authority. If omitted, the principal is eligible in every domain. Domains match by exact string comparison.",
             "items": {
               "type": "string"
             }
@@ -61,7 +69,7 @@
           },
           "domain": {
             "type": "array",
-            "description": "Optional list of domains where this agent is active.",
+            "description": "Optional list of domains in which this agent is eligible to hold or receive authority. If omitted, the agent is eligible in every domain. Domains match by exact string comparison.",
             "items": {
               "type": "string"
             }
@@ -97,7 +105,7 @@
           },
           "domain": {
             "type": "string",
-            "description": "Domain in which this authority relationship applies."
+            "description": "The single domain in which this authority relationship applies. An edge is considered only when its domain exactly matches the active decision domain."
           },
           "relationship": {
             "type": "string",
@@ -147,7 +155,7 @@
       "properties": {
         "domain": {
           "type": "string",
-          "description": "Active decision domain."
+          "description": "Active decision domain, matched exactly against edge domains."
         },
         "system_of_record": {
           "type": "string",
@@ -164,6 +172,97 @@
           "type": "object",
           "description": "Optional extension data.",
           "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "description": "Optional conflict set: competing proposals to be resolved within a single domain.",
+      "required": ["domain", "proposals"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Domain in which the proposals conflict, matched exactly against edge domains."
+        },
+        "proposals": {
+          "type": "array",
+          "description": "Competing actions proposed by agents.",
+          "items": {
+            "type": "object",
+            "required": ["id", "agent", "action"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique proposal identifier."
+              },
+              "agent": {
+                "type": "string",
+                "description": "Identifier of the proposing agent."
+              },
+              "action": {
+                "type": "string",
+                "description": "Action being proposed."
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "resolution": {
+      "type": "object",
+      "description": "Optional declared resolution: the expected outcome for this scenario.",
+      "required": ["selected_agent", "reason"],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "description": "Resolution rule applied, e.g. selected = argmax(authority(agent, context))."
+        },
+        "authority_scores": {
+          "type": "object",
+          "description": "Within-layer authority weight per agent identifier.",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "selected_agent": {
+          "type": "string",
+          "description": "Identifier of the agent whose proposal is selected."
+        },
+        "selected_principal": {
+          "type": "string",
+          "description": "Identifier of the principal represented by the selected agent."
+        },
+        "selected_action": {
+          "type": "string",
+          "description": "Action selected from the conflict set."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Explanation attributing the outcome to authority sources."
+        },
+        "rejected": {
+          "type": "array",
+          "description": "Proposals rejected by the resolution, with reasons.",
+          "items": {
+            "type": "object",
+            "required": ["proposal_id", "reason"],
+            "properties": {
+              "proposal_id": {
+                "type": "string",
+                "description": "Identifier of the rejected proposal."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Why the proposal was rejected."
+              }
+            },
+            "additionalProperties": false
+          }
         }
       },
       "additionalProperties": false
