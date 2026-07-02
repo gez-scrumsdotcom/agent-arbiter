@@ -45,18 +45,34 @@ Where:
 
 ---
 
+## Authority as a Lexicographic Tuple
+
+Authority is a pair, compared lexicographically:
+
+```
+A(agent, context) = (L, s)
+```
+
+Where:
+
+- `L` is the **highest layer** at which the agent holds applicable authority (constitutional > institutional > system > agent)
+- `s ∈ [0, 1]` is the **within-layer score**
+
+Comparison is lexicographic: any authority at a higher layer outranks all authority at lower layers, regardless of score. This makes strict layer override true **by construction** — no combination of lower-layer components can numerically exceed a higher-layer constraint.
+
+The resolution rule is preserved verbatim: `argmax` is taken under the tuple ordering.
+
+---
+
 ## Authority Components
 
-Authority is computed from a combination of signals:
+The five authority components feed the within-layer score `s`:
 
 ```
-A(agent, context) =
-  hierarchy +
-  contract +
-  system_of_record +
-  regulatory +
-  learned_signals
+s = f(hierarchy, contract, system_of_record, regulatory, learned_signals)
 ```
+
+where `f` combines the components into a bounded score in `[0, 1]`. A simple additive combination (clamped to `[0, 1]`) is a valid choice of `f`; implementations may substitute any deterministic, bounded combination.
 
 | Component | Description |
 |---|---|

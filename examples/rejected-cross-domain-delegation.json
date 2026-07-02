@@ -1,0 +1,77 @@
+{
+  "scenario": "Rejected Cross-Domain Delegation",
+  "description": "The legal agent delegates authority to the sales agent in the contract domain only. The conflict is in the pricing domain, so the delegation does not apply and the billing agent's direct pricing authority wins.",
+
+  "context": {
+    "domain": "pricing"
+  },
+
+  "principals": [
+    { "id": "org", "type": "organization", "name": "Acme Corp" },
+    { "id": "finance-policy", "type": "policy", "name": "Finance Pricing Policy" },
+    { "id": "legal-policy", "type": "policy", "name": "Legal Policy" },
+    { "id": "sales-role", "type": "role", "name": "Sales Representative" }
+  ],
+
+  "agents": [
+    { "id": "billing-agent", "principal_id": "finance-policy", "name": "Billing Agent" },
+    { "id": "legal-agent", "principal_id": "legal-policy", "name": "Legal Agent" },
+    { "id": "sales-agent", "principal_id": "sales-role", "name": "Sales Agent" }
+  ],
+
+  "edges": [
+    {
+      "from": "org",
+      "to": "billing-agent",
+      "layer": "institutional",
+      "domain": "pricing",
+      "relationship": "governs",
+      "weight": 0.9
+    },
+    {
+      "from": "org",
+      "to": "legal-agent",
+      "layer": "institutional",
+      "domain": "contract",
+      "relationship": "governs",
+      "weight": 0.9
+    },
+    {
+      "from": "legal-agent",
+      "to": "sales-agent",
+      "layer": "institutional",
+      "domain": "contract",
+      "relationship": "delegates",
+      "weight": 0.8,
+      "scope": {
+        "actions": ["propose_terms"]
+      }
+    }
+  ],
+
+  "conflict": {
+    "domain": "pricing",
+    "proposals": [
+      { "id": "p1", "agent": "sales-agent", "action": "apply_custom_discount" },
+      { "id": "p2", "agent": "billing-agent", "action": "enforce_standard_price" }
+    ]
+  },
+
+  "resolution": {
+    "rule": "selected = argmax(authority(agent, context))",
+    "authority_scores": {
+      "billing-agent": 0.9,
+      "sales-agent": 0
+    },
+    "selected_agent": "billing-agent",
+    "selected_principal": "finance-policy",
+    "selected_action": "enforce_standard_price",
+    "reason": "The delegation to sales-agent is scoped to the contract domain and does not apply in pricing (see delegation-rules: cross-domain leakage). sales-agent therefore holds no authority in this conflict; billing-agent wins on direct institutional authority.",
+    "rejected": [
+      {
+        "proposal_id": "p1",
+        "reason": "delegated authority applies to the contract domain, not pricing"
+      }
+    ]
+  }
+}

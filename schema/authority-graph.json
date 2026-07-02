@@ -213,8 +213,12 @@
     },
     "resolution": {
       "type": "object",
-      "description": "Optional declared resolution: the expected outcome for this scenario.",
-      "required": ["selected_agent", "reason"],
+      "description": "Optional declared resolution: the expected outcome for this scenario — either a selected agent or, for negative-path scenarios, an expected error.",
+      "required": ["reason"],
+      "oneOf": [
+        { "required": ["selected_agent"] },
+        { "required": ["expected_error"] }
+      ],
       "properties": {
         "rule": {
           "type": "string",
@@ -244,6 +248,11 @@
         "reason": {
           "type": "string",
           "description": "Explanation attributing the outcome to authority sources."
+        },
+        "expected_error": {
+          "type": "string",
+          "enum": ["empty_conflict_set", "delegation_cycle"],
+          "description": "For negative-path scenarios: the typed error a conforming resolver must raise instead of selecting an agent."
         },
         "rejected": {
           "type": "array",

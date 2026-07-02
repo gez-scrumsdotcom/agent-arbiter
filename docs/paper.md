@@ -93,6 +93,8 @@ Authority is not abstract. It is derived from: (i) hierarchy (who manages whom),
 This is not intended as a precise mathematical model, but as a computable structure.
 
 > **Erratum:** earlier archived PDF versions of this paper name the last component `bounded_signals`. The canonical term is `learned_signals`, a bounded score in `[0, 1]`, as defined in [spec/authority-model.md](../spec/authority-model.md). The archived PDFs are frozen artifacts and are not updated.
+>
+> The additive form above is a heuristic for the **within-layer score**. The canonical model defines authority as a lexicographic tuple `𝒜(agent, context) = (L, s)`, where `L` is the highest applicable layer and `s ∈ [0, 1]` is the within-layer score the five components feed. Layer override (Section 5) therefore holds by construction: no sum of lower-layer components can exceed a higher-layer constraint. See [spec/authority-model.md](../spec/authority-model.md).
 
 ---
 

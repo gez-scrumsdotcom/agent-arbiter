@@ -10,6 +10,12 @@ It selects.
 
 ---
 
+## Scope
+
+**Conflict detection is out of scope.** The Arbiter receives an already-identified conflict set; gathering proposals and determining that they conflict is the responsibility of the surrounding system.
+
+---
+
 ## Input
 
 A conflict set:
@@ -62,6 +68,19 @@ selected = argmax(authority(agent, context))
 3. Apply layer precedence: constitutional → institutional → system → agent
 4. Apply delegation rules and bounds
 5. Select the highest-authority agent
+
+---
+
+## Authority Aggregation
+
+The effective authority of an agent is the **maximum** over its valid inbound authority sources, ordered lexicographically by `(layer, within-layer weight)`.
+
+Authority is **override-based, not additive**: two weak grants (e.g. 0.4 and 0.4) never outrank a single stronger grant (0.9), and no combination of lower-layer authority can reach a higher layer.
+
+Valid sources are:
+
+- **Direct** — a non-delegation edge in the active domain grants `(edge.layer, edge.weight)`
+- **Delegated** — a valid delegation chain (see [Delegation Rules](delegation-rules.md)) grants the **minimum** `(layer, weight)` along the chain, so delegation never escalates beyond its source
 
 ---
 

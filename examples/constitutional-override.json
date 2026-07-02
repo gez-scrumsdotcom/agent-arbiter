@@ -1,0 +1,64 @@
+{
+  "scenario": "Constitutional Override",
+  "description": "A constitutional constraint with a low within-layer weight (0.5) overrides institutional authority with a high weight (0.95). Authority is a lexicographic tuple: layers dominate weights.",
+
+  "context": {
+    "domain": "data-retention",
+    "constraints": ["gdpr_right_to_erasure"]
+  },
+
+  "principals": [
+    { "id": "regulator", "type": "regulator", "name": "Data Protection Authority" },
+    { "id": "org", "type": "organization", "name": "Acme Corp" }
+  ],
+
+  "agents": [
+    { "id": "compliance-agent", "principal_id": "regulator", "name": "Compliance Agent" },
+    { "id": "ops-agent", "principal_id": "org", "name": "Operations Agent" }
+  ],
+
+  "edges": [
+    {
+      "from": "regulator",
+      "to": "compliance-agent",
+      "layer": "constitutional",
+      "domain": "data-retention",
+      "relationship": "constrains",
+      "weight": 0.5
+    },
+    {
+      "from": "org",
+      "to": "ops-agent",
+      "layer": "institutional",
+      "domain": "data-retention",
+      "relationship": "governs",
+      "weight": 0.95
+    }
+  ],
+
+  "conflict": {
+    "domain": "data-retention",
+    "proposals": [
+      { "id": "p1", "agent": "ops-agent", "action": "retain_user_data_for_analytics" },
+      { "id": "p2", "agent": "compliance-agent", "action": "erase_user_data_on_request" }
+    ]
+  },
+
+  "resolution": {
+    "rule": "selected = argmax(authority(agent, context))",
+    "authority_scores": {
+      "compliance-agent": 0.5,
+      "ops-agent": 0.95
+    },
+    "selected_agent": "compliance-agent",
+    "selected_principal": "regulator",
+    "selected_action": "erase_user_data_on_request",
+    "reason": "compliance-agent holds constitutional authority; ops-agent holds only institutional authority. Layers are compared before weights, so constitutional 0.5 outranks institutional 0.95 — no lower-layer weight can override a constitutional constraint.",
+    "rejected": [
+      {
+        "proposal_id": "p1",
+        "reason": "violates a constitutional constraint (gdpr_right_to_erasure)"
+      }
+    ]
+  }
+}
