@@ -1,4 +1,19 @@
+<div align="center">
+
 # Agent Arbiter
+
+**Deterministic conflict resolution for multi-agent systems — authority, not negotiation.**
+
+[![CI](https://github.com/gez-scrumsdotcom/agent-arbiter/actions/workflows/ci.yml/badge.svg)](https://github.com/gez-scrumsdotcom/agent-arbiter/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg?logo=typescript&logoColor=white)](tsconfig.json)
+[![Paper](https://img.shields.io/badge/paper-Authority_is_All_You_Need-b31b1b.svg)](docs/paper.md)
+
+[Specification](spec/authority-model.md) · [Schema](schema/authority-graph.json) · [Examples](examples/) · [Reference Implementation](reference/resolver.ts) · [Paper](docs/paper.md) · [Contributing](CONTRIBUTING.md)
+
+</div>
+
+---
 
 **Agent Arbiter** resolves conflicts in multi-agent systems by deterministically selecting the agent with explicit authority, grounded in real-world structures such as roles, contracts, and system ownership.
 
