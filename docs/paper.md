@@ -87,10 +87,12 @@ Where `d ∈ D` represents the active domain.
 Authority is not abstract. It is derived from: (i) hierarchy (who manages whom), (ii) contracts (who has rights), (iii) systems (who owns truth), and (iv) constraints (what cannot be violated). We model authority as:
 
 ```
-𝒜(agent, context) = hierarchy + contract + system_of_record + regulatory + bounded_signals
+𝒜(agent, context) = hierarchy + contract + system_of_record + regulatory + learned_signals
 ```
 
 This is not intended as a precise mathematical model, but as a computable structure.
+
+> **Erratum:** earlier archived PDF versions of this paper name the last component `bounded_signals`. The canonical term is `learned_signals`, a bounded score in `[0, 1]`, as defined in [spec/authority-model.md](../spec/authority-model.md). The archived PDFs are frozen artifacts and are not updated.
 
 ---
 
@@ -134,7 +136,7 @@ The system receives competing proposals from multiple agents, detects conflicts,
 
 ### 8.2 Agent Authority Graph
 
-[View Agent Authority Graph Diagram](arbitrer_authority_graph_diagram.pdf)
+[View Agent Authority Graph Diagram](arbiter_authority_graph_diagram.pdf)
 
 The authority graph encodes directed relationships between principals and agents. Nodes represent agents mapped to real-world principals. Edges represent authority relationships scoped to a domain and layer.
 

@@ -66,6 +66,8 @@ A(agent, context) =
 | `regulatory` | Authority imposed by laws or non-overridable constraints |
 | `learned_signals` | Bounded signals such as expertise or reliability |
 
+`learned_signals` is the canonical name for the learned component. It is a bounded score in `[0, 1]` derived from observed signals such as expertise, reliability, or historical accuracy. It may adjust precedence within a layer but can never create authority that overrides a higher layer.
+
 ---
 
 ## Authority Layers
@@ -158,3 +160,11 @@ This transforms multi-agent conflict resolution from:
 into:
 
 > a selection problem
+
+---
+
+## Related Specifications
+
+- [Authority Layers](authority-layers.md) — layered precedence order
+- [Delegation Rules](delegation-rules.md) — bounds on delegated authority
+- [Resolution](resolution.md) — resolution steps and tie-break

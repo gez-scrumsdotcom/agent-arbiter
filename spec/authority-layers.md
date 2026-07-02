@@ -163,3 +163,11 @@ Authority layers must satisfy the following:
 Authority layers provide a bounded and deterministic order for conflict resolution.
 
 They ensure that multi-agent decisions follow real-world precedence rather than uncontrolled interaction.
+
+---
+
+## Related Specifications
+
+- [Authority Model](authority-model.md) — how authority is defined and computed
+- [Delegation Rules](delegation-rules.md) — bounds on delegated authority
+- [Resolution](resolution.md) — resolution steps and tie-break

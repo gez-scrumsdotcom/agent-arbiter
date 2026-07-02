@@ -65,6 +65,18 @@ selected = argmax(authority(agent, context))
 
 ---
 
+## Tie-Break
+
+If multiple agents hold the highest authority, the tie is broken deterministically, in order:
+
+1. **Higher layer** — constitutional → institutional → system → agent
+2. **Higher within-layer weight** — the larger bounded weight wins
+3. **Lexicographic agent id** — the smallest agent identifier (Unicode code point order) wins
+
+This ordering is stable, auditable, and independent of input order: permuting the agents, edges, or proposals in the input must not change the outcome.
+
+---
+
 ## Constraints
 
 Resolution must be:
@@ -74,10 +86,18 @@ Resolution must be:
 - **Bounded** — resolution must terminate
 - **Explainable** — the selected agent and reason must be attributable
 
-If multiple agents have equal authority, a deterministic tie-break must be applied.
+If multiple agents have equal authority, the tie-break defined above must be applied.
 
 ---
 
 ## Summary
 
 Agent Arbiter resolves conflict by selecting the single highest-authority action within a defined context.
+
+---
+
+## Related Specifications
+
+- [Authority Model](authority-model.md) — how authority is defined and computed
+- [Authority Layers](authority-layers.md) — layered precedence order
+- [Delegation Rules](delegation-rules.md) — bounds on delegated authority

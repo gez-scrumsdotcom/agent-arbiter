@@ -1,6 +1,6 @@
 {
   "scenario": "Organizational Hierarchy",
-  "description": "Authority flows through organizational structure.",
+  "description": "Authority flows through organizational structure. The CEO agent holds the highest within-layer weight; the finance and sales agents tie at 0.9 and illustrate the deterministic tie-break.",
 
   "context": {
     "domain": "decision"
@@ -18,12 +18,15 @@
     { "id": "sales-agent", "principal_id": "sales-head", "name": "Sales Agent" }
   ],
 
-  "resolution": {
-    "selected_agent": "ceo-agent",
-    "reason": "ceo-agent holds the highest institutional authority; finance-agent and sales-agent operate under CEO governance"
-  },
-
   "edges": [
+    {
+      "from": "ceo",
+      "to": "ceo-agent",
+      "layer": "institutional",
+      "domain": "decision",
+      "relationship": "represents",
+      "weight": 1.0
+    },
     {
       "from": "ceo",
       "to": "finance-agent",
@@ -40,5 +43,17 @@
       "relationship": "governs",
       "weight": 0.9
     }
-  ]
+  ],
+
+  "resolution": {
+    "rule": "selected = argmax(authority(agent, context))",
+    "authority_scores": {
+      "ceo-agent": 1.0,
+      "finance-agent": 0.9,
+      "sales-agent": 0.9
+    },
+    "selected_agent": "ceo-agent",
+    "selected_principal": "ceo",
+    "reason": "All three agents hold institutional authority; ceo-agent wins on within-layer weight (1.0 > 0.9). finance-agent and sales-agent tie at 0.9 — absent the CEO, the tie-break in spec/resolution.md would select finance-agent by lexicographic agent id."
+  }
 }
