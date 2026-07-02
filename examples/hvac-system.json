@@ -19,6 +19,14 @@
     { "id": "user-agent", "principal_id": "user", "name": "User Agent" }
   ],
 
+  "conflict": {
+    "domain": "environment",
+    "proposals": [
+      { "id": "p1", "agent": "user-agent", "action": "set_temperature_16" },
+      { "id": "p2", "agent": "hvac-agent", "action": "enforce_min_temperature_21" }
+    ]
+  },
+
   "resolution": {
     "selected_agent": "hvac-agent",
     "reason": "building-policy enforces a constitutional constraint of min 21°C; user preference is overridden by system authority"

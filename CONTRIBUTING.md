@@ -12,7 +12,7 @@ Thank you for your interest in contributing to Agent Arbiter.
 ## Guidelines
 
 - Spec changes must include a rationale explaining why the change improves correctness or clarity
-- Examples must validate against the schema in `schema/authority-graph.json`
+- Examples must validate against the schema in `schema/authority-graph.json` and resolve to their declared outcome — run `npm ci && npm run ci` before submitting
 - Keep pull requests focused — one change per PR
 
 ## Process
