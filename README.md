@@ -183,17 +183,22 @@ No back-and-forth. No escalation loop. One resolution.
 
 ## Reference Implementation
 
-```typescript
-type Agent = string
+[`reference/resolver.ts`](reference/resolver.ts) implements the resolution steps of [spec/resolution.md](spec/resolution.md): domain filtering, direct and delegated authority (bounded depth, cycle detection, non-escalation), layer precedence, and the deterministic tie-break — with a trace explaining every decision.
 
-function resolve(
-  candidates: Agent[],
-  authority: (agent: Agent) => number
-): Agent {
-  return candidates.reduce((best, current) =>
-    authority(current) > authority(best) ? current : best
-  )
-}
+```typescript
+import { resolve } from './reference/resolver.js'
+
+const result = resolve(authorityGraph) // any examples/*.json scenario
+result.selected_agent // → "billing-agent"
+result.decided_by     // → "weight" (which tie-break stage decided)
+result.scores         // → effective (layer, weight, path) per candidate
+```
+
+```bash
+npm ci
+npm run typecheck   # tsc --noEmit
+npm run validate    # every example validates against the schema
+npm test            # every example resolves to its declared winner
 ```
 
 ---
@@ -225,15 +230,13 @@ The formal definitions live in the specs — they are the single source of truth
 agent-arbiter/
 ├── spec/        # formal definitions of authority and resolution
 ├── schema/      # authority graph schema
-├── reference/   # minimal reference implementation
+├── reference/   # reference implementation and tests
 ├── examples/    # real-world scenarios
 ├── docs/        # paper and supporting material
 └── README.md
 ```
 
-The repository is organized to separate specification, schema, implementation, and real-world examples.
-
-> **Note:** No `package.json` or `tsconfig.json` is included. The `reference/` files are illustrative TypeScript, not a published package.
+The repository is organized to separate specification, schema, implementation, and real-world examples. CI validates every example against the schema and resolves it with the reference implementation on each push.
 
 ---
 

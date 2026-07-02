@@ -1,0 +1,20 @@
+{
+  "name": "agent-arbiter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic conflict resolution for multi-agent systems via layered authority.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate": "vitest run reference/schema.test.ts",
+    "ci": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "ajv": "^8.17.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

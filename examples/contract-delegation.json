@@ -18,6 +18,14 @@
     { "id": "sales-agent", "principal_id": "sales-role", "name": "Sales Agent" }
   ],
 
+  "conflict": {
+    "domain": "contract",
+    "proposals": [
+      { "id": "p1", "agent": "sales-agent", "action": "propose_amended_payment_terms" },
+      { "id": "p2", "agent": "legal-agent", "action": "enforce_standard_compliant_terms" }
+    ]
+  },
+
   "resolution": {
     "selected_agent": "legal-agent",
     "reason": "legal-agent holds institutional authority over contract amendments; sales-agent may only propose within delegated scope"

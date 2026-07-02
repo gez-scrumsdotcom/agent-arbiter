@@ -45,6 +45,15 @@
     }
   ],
 
+  "conflict": {
+    "domain": "decision",
+    "proposals": [
+      { "id": "p1", "agent": "ceo-agent", "action": "approve_budget" },
+      { "id": "p2", "agent": "finance-agent", "action": "defer_budget" },
+      { "id": "p3", "agent": "sales-agent", "action": "increase_budget" }
+    ]
+  },
+
   "resolution": {
     "rule": "selected = argmax(authority(agent, context))",
     "authority_scores": {
